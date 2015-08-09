@@ -22,7 +22,7 @@ class Arr
      * Create a new Arr
      *
      * @param array $attributes
-     * @return Arr
+     * @return self
      */
     public static function create($attributes)
     {
@@ -44,11 +44,48 @@ class Arr
      * Run a Closure over each attibute and return a new Arr
      *
      * @param Closure $callback
-     * @return Collection
+     * @return self
      */
     public function map(Closure $callback)
     {
         return new self(array_map($callback, $this->attributes, array_keys($this->attributes)));
+    }
+
+    /**
+     * Run a filter over each of the attributes
+     *
+     * @param Closure $callback
+     * @return self
+     */
+    public function filter(Closure $callback = null)
+    {
+        if ($callback) return new self(array_filter($this->attributes, $callback));
+
+        return new self(array_filter($this->attributes));
+    }
+
+    /**
+     * Check to see if the Arr contains a value
+     *
+     * @param mixed $key
+     * @param mixed $value
+     * @return bool
+     */
+    public function contains($key, $value = null)
+    {
+        if (func_num_args() == 2) {
+            return $this->contains(function ($k, $item) use ($key, $value) {
+                if (self::isArray($item)) return self::pluck($item, $key) == $value;
+
+                return $item == $value;
+            });
+        }
+
+        if (is_callable($key)) {
+            return ! is_null(self::first($this->attributes, $key));
+        }
+
+        return in_array($key, $this->attributes);
     }
 
     /**
@@ -64,6 +101,16 @@ class Arr
         if (! self::isArray($value)) return $value;
 
         return self::create($value);
+    }
+
+    /**
+     * Reset the keys on the underlying array
+     *
+     * @return self
+     */
+    public function values()
+    {
+        return new self(array_values($this->attributes));
     }
 
     /**
@@ -101,6 +148,25 @@ class Arr
         if (! self::has($data, $key)) return $default;
 
         return $data[$key];
+    }
+
+    /**
+     * Return the first value using a callback
+     *
+     * @param array $data
+     * @param callable $callback
+     * @param mixed $default
+     * @return mixed
+     */
+    public static function first(array $data, callable $callback, $default = null)
+    {
+        foreach ($data as $key => $value) {
+            if (call_user_func($callback, $key, $value)) {
+                return $value;
+            }
+        }
+
+        return $default;
     }
 
     /**

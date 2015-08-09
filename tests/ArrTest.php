@@ -23,6 +23,14 @@ class ArrTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
+    public function should_return_the_first_item_using_a_callback()
+    {
+        $this->assertEquals(2, Arr::first([1,2,3], function ($key, $item) {
+            if ($item % 2 == 0) return $item;
+        }));
+    }
+
+    /** @test */
     public function should_return_as_array()
     {
         $this->assertTrue(is_array(Arr::create([])->toArray()));
@@ -64,5 +72,27 @@ class ArrTest extends \PHPUnit_Framework_TestCase
         });
 
         $this->assertEquals([2,4,6], $arr->toArray());
+    }
+
+    /** @test */
+    public function should_filter_array()
+    {
+        $arr = Arr::create([1,2,3])->filter(function ($attribute) {
+            return $attribute % 2 == 0;
+        });
+
+        $this->assertEquals([2], $arr->values()->toArray());
+    }
+
+    /** @test */
+    public function should_see_if_array_contains_value()
+    {
+        $this->assertTrue(Arr::create([1,2,3])->contains(1));
+
+        $this->assertFalse(Arr::create([1,2,3])->contains(4));
+
+        $this->assertTrue(Arr::create(['hello' => 'world'])->contains('hello', 'world'));
+
+        $this->assertFalse(Arr::create(['hello' => 'world'])->contains('yo', 'dawg'));
     }
 }
