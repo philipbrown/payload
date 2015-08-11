@@ -11,7 +11,6 @@ class Arr
 
     /**
      * @param array $attributes
-     * @return void
      */
     private function __construct(array $attributes)
     {

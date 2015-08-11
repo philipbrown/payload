@@ -77,6 +77,14 @@ class ArrTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function should_filter_array()
     {
+        $arr = Arr::create([1,null,2])->filter();
+
+        $this->assertEquals([1,2], $arr->values()->toArray());
+    }
+
+    /** @test */
+    public function should_filter_array_with_closure()
+    {
         $arr = Arr::create([1,2,3])->filter(function ($attribute) {
             return $attribute % 2 == 0;
         });

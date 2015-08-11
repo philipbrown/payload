@@ -10,20 +10,9 @@ class JSONAPINormaliser implements Normaliser
     protected $unserialiser;
 
     /**
-     * Normalise a payload
-     *
-     * @param mixed $payload
-     * @return Document
-     */
-    public function normalise($payload)
-    {
-
-    }
-
-    /**
      * Return the Unserialiser
      *
-     * @return Unserialiser
+     * @return JSONUnserialiser
      */
     public function unserialiser()
     {

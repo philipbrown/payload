@@ -3,17 +3,9 @@
 interface Normaliser
 {
     /**
-     * Normalise a payload
-     *
-     * @param mixed $payload
-     * @return Document
-     */
-    public function normalise($payload);
-
-    /**
      * Return the Unserialiser
      *
-     * @return Unserialiser
+     * @return Papertrail\Payload\Unserialisers\Unserialiser
      */
     public function unserialiser();
 }
