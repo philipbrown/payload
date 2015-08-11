@@ -25,7 +25,7 @@ class File
     {
         if (file_exists($path)) return true;
 
-        throw new FileDoesNotExistException(sprintf('%s is not a valid file', $path));
+        return false;
     }
 
     /**
@@ -37,6 +37,8 @@ class File
     public static function contents($path)
     {
         if (self::exists($path)) return trim(file_get_contents($path));
+
+        throw new FileDoesNotExistException(sprintf('%s is not a valid file', $path));
     }
 
     /**
@@ -48,5 +50,7 @@ class File
     public static function get($path)
     {
         if (self::exists($path)) return require $path;
+
+        throw new FileDoesNotExistException(sprintf('%s is not a valid file', $path));
     }
 }

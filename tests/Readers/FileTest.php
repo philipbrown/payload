@@ -17,11 +17,17 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /** @test */
-    public function should_throw_exception_when_the_file_does_not_exist()
+    public function should_return_false_when_files_does_not_exist()
+    {
+        $this->assertFalse(File::exists('invalid.json'));
+    }
+
+    /** @test */
+    public function should_throw_exception_when_getting_contents_of_file_that_does_not_exist()
     {
         $this->setExpectedException('PhilipBrown\Payload\Readers\Exceptions\FileDoesNotExistException');
 
-        File::exists('invalid.json');
+        File::contents('invalid.json');
     }
 
     /** @test */
@@ -30,6 +36,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $contents = File::contents(sprintf('%s/stubs/data.json', __DIR__));
 
         $this->assertEquals(json_encode(['hello' => 'world']), $contents);
+    }
+
+    /** @test */
+    public function should_throw_exception_when_getting_file_that_does_not_exist()
+    {
+        $this->setExpectedException('PhilipBrown\Payload\Readers\Exceptions\FileDoesNotExistException');
+
+        File::get('invalid.json');
     }
 
     /** @test */
